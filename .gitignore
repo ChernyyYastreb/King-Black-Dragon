@@ -4,3 +4,10 @@
 *.jar
 *.war
 *.ear
+*.classpath
+*.xml
+*.name
+*.name
+*.idea
+*.iml
+*.project
