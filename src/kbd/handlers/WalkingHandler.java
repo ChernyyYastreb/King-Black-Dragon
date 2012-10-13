@@ -15,7 +15,7 @@ public class WalkingHandler extends Node {
 	
 	@Override
 	public boolean activate() {
-		return Inventory.contains(this.foodId);
+		return Inventory.getItem(this.foodId) != null;
 	}
 
 	@Override

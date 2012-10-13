@@ -18,7 +18,7 @@ public class BankingHandler extends Node {
 	@Override
 	public boolean activate() {
 		return RSC.bankArea.contains(Players.getLocal().getLocation())
-				&& !Inventory.contains(foodId);
+				&& Inventory.getItem(foodId) == null;
 	}
 
 	@Override

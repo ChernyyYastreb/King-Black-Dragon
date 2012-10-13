@@ -21,8 +21,6 @@ import org.powerbot.game.api.wrappers.Tile;
 public class RSC {
 	public static final int[] FOOD_IDS = { 7946 };
 	
-	public static final int entranceId = 77834;
-	
 	public static final Area bankArea = new Area(
 			new Tile(3089, 3500, 0), 
 			new Tile(3098, 3500, 0), 
