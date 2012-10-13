@@ -34,7 +34,7 @@ public class ObjectHandler extends Node {
 		final WidgetChild warningScreen = Widgets.get(1361, 13);
 		
 		//Below we handle exiting the cave
-		if (SceneEntities.getNearest(exitId) != null) {
+		if (SceneEntities.getNearest(exitId) != null && !Inventory.contains(RSC.FOOD_IDS)) {
 			if (SceneEntities.getNearest(exitId).isOnScreen() 
 				&& Players.getLocal().getAnimation() != 8939) {
 				if (SceneEntities.getNearest(exitId).click(true)) {
