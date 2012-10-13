@@ -23,7 +23,7 @@ public class ObjectHandler extends Node {
 			&& Inventory.contains(RSC.FOOD_IDS)) {
 			return true;
 		} else if (SceneEntities.getNearest(exitId) != null
-				   && Inventory.contains(RSC.FOOD_IDS)) {
+				   && !Inventory.contains(RSC.FOOD_IDS)) {
 			return true;
 		}
 		return false;
@@ -35,24 +35,29 @@ public class ObjectHandler extends Node {
 		
 		//Below we handle exiting the cave
 		if (SceneEntities.getNearest(exitId) != null) {
-			if (Players.getLocal().getAnimation() != 8939) {
+			if (SceneEntities.getNearest(exitId).isOnScreen() 
+				&& Players.getLocal().getAnimation() != 8939) {
 				if (SceneEntities.getNearest(exitId).click(true)) {
 					Task.sleep(2000,3001);
 				}
+			} else {
+				Walking.walk(SceneEntities.getNearest(exitId));
 			}
 		}
 		
 		//Here, we handle enter the cave
-		if (SceneEntities.getNearest(entranceId).isOnScreen() 
-			&& !warningScreen.validate()
-			&& Players.getLocal().getAnimation() == -1) {
-			if (!Players.getLocal().isMoving() && SceneEntities.getNearest(entranceId).click(true)) {
-				Task.sleep(2000,2201);
-			}
-		} else {
-			if (Players.getLocal().getAnimation() != 827
-				&& Players.getLocal().getAnimation() != 8939) {
-				Walking.walk(SceneEntities.getNearest(entranceId));
+		if (SceneEntities.getNearest(entranceId) != null) {
+			if (SceneEntities.getNearest(entranceId).isOnScreen() 
+				&& !warningScreen.validate()
+				&& Players.getLocal().getAnimation() == -1) {
+				if (!Players.getLocal().isMoving() && SceneEntities.getNearest(entranceId).click(true)) {
+					Task.sleep(2000,2201);
+				}
+			} else {
+				if (Players.getLocal().getAnimation() != 827
+					&& Players.getLocal().getAnimation() != 8939) {
+					Walking.walk(SceneEntities.getNearest(entranceId));
+				}
 			}
 		}
 		

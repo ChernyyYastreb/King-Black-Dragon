@@ -27,17 +27,6 @@ public class RSC {
 			new Tile(3098, 3487, 0), 
 			new Tile(3089, 3487, 0));
 	
-	public static final Tile[] toArtifact = {
-			new Tile(3092, 3495, 0), 
-			new Tile(3092, 3502, 0), 
-			new Tile(3086, 3502, 0), 
-			new Tile(3077, 3502, 0), 
-			new Tile(3072, 3502, 0), 
-			new Tile(3070, 3507, 0), 
-			new Tile(3065, 3511, 0), 
-			new Tile(3056, 3513, 0), 
-			new Tile(3052, 3517, 0)};
-	
 	public static final void drawMouse(Graphics g, Color c) {
 		Graphics2D g1 = (Graphics2D) g;
 		g1.setColor(c);
