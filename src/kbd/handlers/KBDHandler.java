@@ -38,7 +38,19 @@ public class KBDHandler extends Node {
 		} else {
 			//If the KBD is alive and we are too close, walk away from it
 			if (Calculations.distance(KBD.getLocation(), Players.getLocal().getLocation()) < 3) {
-				Walking.walk(KBD.getLocation().derive(0, -Random.nextInt(5, 7)));
+				int select = Random.nextInt(0, 3);
+				if (!Players.getLocal().isMoving()) {
+					switch(select) {
+					case 0:
+						Walking.walk(KBD.getLocation().derive(0, -5));
+						break;
+					case 1:
+						Walking.walk(KBD.getLocation().derive(-5, 0));
+						break;
+					case 2:
+						Walking.walk(KBD.getLocation().derive(5, 0));
+					}
+				}
 			} else {
 				//If the KBD is on screen, attack it
 				if (KBD.isOnScreen()) {
