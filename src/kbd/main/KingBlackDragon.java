@@ -29,7 +29,7 @@ public class KingBlackDragon extends ActiveScript implements PaintListener {
 	});
 	
 	public void onStart() {
-		Mouse.setSpeed(Speed.VERY_FAST);
+		Mouse.setSpeed(Speed.FAST);
 	}
 
 	@Override

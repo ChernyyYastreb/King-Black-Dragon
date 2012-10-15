@@ -19,7 +19,8 @@ import org.powerbot.game.api.wrappers.Tile;
  * In comparison to the abstract static Math class, RSC provides methods useful to the writer and other programmers.
  */
 public class RSC {
-	public static final int[] FOOD_IDS = { 7946 };
+	public static final int[] FOOD_IDS = { 7946 },
+							  ANTI_FIRE_IDS = {2458,2456,2454,2452};
 	
 	public static final Area bankArea = new Area(
 			new Tile(3089, 3500, 0), 
