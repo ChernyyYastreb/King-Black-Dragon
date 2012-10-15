@@ -39,6 +39,7 @@ public class KBDHandler extends Node {
 			//If the KBD is alive and we are too close, walk away from it
 			if (Calculations.distance(KBD.getLocation(), Players.getLocal().getLocation()) < 3) {
 				int select = Random.nextInt(0, 3);
+				//We don't want to walk to the same spot every time, so let's randomize it a bit
 				if (!Players.getLocal().isMoving()) {
 					switch(select) {
 					case 0:
@@ -54,7 +55,6 @@ public class KBDHandler extends Node {
 			} else {
 				//If the KBD is on screen, attack it
 				if (KBD.isOnScreen()) {
-					//If we are far enough away, let's attack it
 					if (Players.getLocal().getInteracting() == null) {
 						KBD.interact("Attack");
 						Task.sleep(1500,2001);

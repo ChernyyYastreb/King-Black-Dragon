@@ -1,8 +1,11 @@
 package kbd.handlers;
 
 
+import kbd.rsc.RSC;
+
 import org.powerbot.core.script.job.state.Node;
 import org.powerbot.game.api.methods.Walking;
+import org.powerbot.game.api.methods.interactive.Players;
 import org.powerbot.game.api.methods.tab.Inventory;
 import org.powerbot.game.api.wrappers.Tile;
 
@@ -26,11 +29,21 @@ public class WalkingHandler extends Node {
 	
 	@Override
 	public boolean activate() {
-		return Inventory.getItem(this.foodId) != null;
+		if (Inventory.getItem(this.foodId) != null) {
+			return true;
+		}
+		if (Inventory.getItem(this.foodId) == null 
+				&& !RSC.bankArea.contains(Players.getLocal().getLocation())
+				&& Players.getLocal().getLocation().getY() < 4000) {
+			return true;
+		}
+		return false;
 	}
 
 	@Override
 	public void execute() {
-		Walking.newTilePath(toArtifact).traverse();
+		if (Inventory.getItem(this.foodId) != null) {
+		    Walking.newTilePath(toArtifact).traverse();
+		}
 	}
 }

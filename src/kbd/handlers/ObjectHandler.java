@@ -11,6 +11,10 @@ import org.powerbot.game.api.methods.node.SceneEntities;
 import org.powerbot.game.api.methods.tab.Inventory;
 import org.powerbot.game.api.wrappers.widget.WidgetChild;
 
+/**
+ * @author Nolan
+ * Svetty, this is powerbot bro.
+ */
 public class ObjectHandler extends Node {
 
 	private final int entranceId = 77834,
@@ -45,7 +49,7 @@ public class ObjectHandler extends Node {
 			}
 		}
 		
-		//Here, we handle enter the cave
+		//Here, we handle entering the cave
 		if (SceneEntities.getNearest(entranceId) != null) {
 			if (SceneEntities.getNearest(entranceId).isOnScreen() 
 				&& !warningScreen.validate()
@@ -54,6 +58,8 @@ public class ObjectHandler extends Node {
 					Task.sleep(2000,2201);
 				}
 			} else {
+				//if we are not in the teleport, 
+				//animation then we can walk to the object
 				if (Players.getLocal().getAnimation() != 827
 					&& Players.getLocal().getAnimation() != 8939) {
 					Walking.walk(SceneEntities.getNearest(entranceId));

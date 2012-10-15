@@ -23,8 +23,8 @@ import org.powerbot.game.api.util.Random;
 public class KingBlackDragon extends ActiveScript implements PaintListener {
 	private Tree scriptTree = new Tree(new Node[] {
 			new BankingHandler(7946),
-			new KBDHandler(),
 			new ObjectHandler(),
+			new KBDHandler(),
 			new WalkingHandler(7946)
 	});
 	
