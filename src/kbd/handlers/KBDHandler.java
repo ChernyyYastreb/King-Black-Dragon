@@ -39,6 +39,7 @@ public class KBDHandler extends Node implements MessageListener {
 			Task.sleep(1500,2001);
 		}
 		
+		//If we have any vials in our inventory, drop them
 		if (Inventory.contains(new int[]{229})) {
 			Inventory.getItem(229).getWidgetChild().interact("Drop");
 		}
