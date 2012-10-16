@@ -29,7 +29,7 @@ public class WalkingHandler extends Node {
 	
 	@Override
 	public boolean activate() {
-		if (Inventory.getItem(this.foodId) != null) {
+		if (Inventory.getItem(this.foodId) != null && Players.getLocal().getLocation().getY() < 4000) {
 			return true;
 		}
 		if (Inventory.getItem(this.foodId) == null 
@@ -42,8 +42,13 @@ public class WalkingHandler extends Node {
 
 	@Override
 	public void execute() {
-		if (Inventory.getItem(this.foodId) != null) {
+		if (Inventory.getItem(this.foodId) != null && Players.getLocal().getLocation().getY() < 4000) {
 		    Walking.newTilePath(toArtifact).traverse();
+		}
+		if (Inventory.getItem(this.foodId) == null 
+				&& !RSC.bankArea.contains(Players.getLocal().getLocation())
+				&& Players.getLocal().getLocation().getY() < 4000) {
+			Walking.newTilePath(toArtifact).reverse();
 		}
 	}
 }
