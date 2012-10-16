@@ -7,8 +7,6 @@ import java.awt.Graphics2D;
 import kbd.handlers.*;
 import kbd.rsc.RSC;
 
-import org.powerbot.core.event.events.MessageEvent;
-import org.powerbot.core.event.listeners.MessageListener;
 import org.powerbot.core.event.listeners.PaintListener;
 import org.powerbot.core.script.ActiveScript;
 import org.powerbot.core.script.job.LoopTask;
@@ -23,7 +21,7 @@ import org.powerbot.game.api.util.Random;
 		  name = "Auto KBD",
 		  description = "Kills the King Black Dragon",
 		  version = 0.01D)
-public class KingBlackDragon extends ActiveScript implements PaintListener, MessageListener {
+public class KingBlackDragon extends ActiveScript implements PaintListener {
 	public static boolean drinkAntiFire = true;
 	
 	private Tree scriptTree = new Tree(new Node[] {
@@ -63,12 +61,5 @@ public class KingBlackDragon extends ActiveScript implements PaintListener, Mess
 	public void onRepaint(Graphics g1) {
 		Graphics2D g = (Graphics2D) g1;
 		RSC.drawMouse(g, new Color(0,0,0,175));
-	}
-
-	@Override
-	public void messageReceived(MessageEvent e) {
-		if (e.getMessage().equalsIgnoreCase("Your resistance to dragonfire is about to run out.")) {
-			drinkAntiFire = true;
-		}
 	}
 }

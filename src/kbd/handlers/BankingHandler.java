@@ -36,7 +36,7 @@ public class BankingHandler extends Node {
 				return Bank.isOpen();
 			}
 		}, 2000)) {
-			if (Bank.depositInventory() && Bank.withdraw(this.foodId, 0)) {
+			if (Bank.depositInventory() && Bank.withdraw(RSC.ANTI_FIRE_IDS[3], 1) && Bank.withdraw(this.foodId, 0)) {
 				Bank.close();
 			}
 		}
