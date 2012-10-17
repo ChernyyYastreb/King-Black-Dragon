@@ -9,10 +9,28 @@ import org.powerbot.game.api.methods.tab.Inventory;
 import org.powerbot.game.api.methods.widget.Bank;
 
 public class BankingHandler extends Node {
-	private int foodId;
+	private int foodId, potionId;
 	
-	public BankingHandler(int foodId) {
+	public BankingHandler(final int foodId) {
 		this.foodId = foodId;
+	}
+	
+	/**
+	 * Searches the bank for the best ranging potion.
+	 * If it does not find any ranging potions, set the id to -1.
+	 */
+	private void chosePotion() {
+		if (Bank.getItem(RSC.EXTREME_RANGING_FLASK_IDS[5]) != null) {
+			potionId = RSC.EXTREME_RANGING_FLASK_IDS[5];
+		} else if (Bank.getItem(RSC.EXTREME_RANGING_POTION_IDS[3]) != null) {
+			potionId = RSC.EXTREME_RANGING_POTION_IDS[3];
+		} else if (Bank.getItem(RSC.RANGING_FLASK_IDS[5]) != null) {
+			potionId = RSC.RANGING_FLASK_IDS[5];
+		} else if (Bank.getItem(RSC.RANGING_POTION_IDS[3]) != null) {
+			potionId = RSC.RANGING_POTION_IDS[3];
+		} else {
+			potionId = -1;
+		}
 	}
 
 	@Override
@@ -27,18 +45,35 @@ public class BankingHandler extends Node {
 		if (RSC.waitFor(new Condition() {
 			@Override
 			public boolean validate() {
+				//If the bank isn't open
 				return !Bank.isOpen();
 			}
 		}, 1500)) {
+			//Open the bank
 			Bank.open();
 		} else if (RSC.waitFor(new Condition() {
 			@Override
 			public boolean validate() {
+				//If the bank is open
 				return Bank.isOpen();
 			}
 		}, 2000)) {
-			if (Bank.depositInventory() && Bank.withdraw(RSC.ANTI_FIRE_IDS[3], 1) && Bank.withdraw(this.foodId, 0)) {
-				Bank.close();
+			//If depositing the inventory was successful 
+			//and withdrawing an antifire potion was successful
+			if (Bank.depositInventory() 
+				&& Bank.withdraw(RSC.ANTI_FIRE_IDS[3], 1)) {
+				//Find the best suitable potion
+				chosePotion();
+				//If we found a potion, withdraw one
+				if (potionId != -1) {
+					//If the withdraw was successful, close the bank
+					if (Bank.withdraw(potionId, 1)) {
+						Bank.close();
+					}
+				} else {
+					//If we didn't find a potion, close the bank
+					Bank.close();
+				}
 			}
 		}
 	}

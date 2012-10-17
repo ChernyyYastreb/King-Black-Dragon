@@ -6,6 +6,7 @@ import kbd.main.KingBlackDragon;
 import kbd.rsc.RSC;
 
 import org.powerbot.core.script.job.state.Node;
+import org.powerbot.game.api.methods.Walking;
 import org.powerbot.game.api.methods.interactive.Players;
 import org.powerbot.game.api.methods.node.GroundItems;
 import org.powerbot.game.api.wrappers.node.GroundItem;
@@ -28,10 +29,16 @@ public class LootHandler extends Node {
 	public void execute() {
 		GroundItem loot = GroundItems.getNearest(this.loot);
 		if (loot != null) {
-			try {
-				RSC.lootItem(loot, KingBlackDragon.profit);
-			} catch (IOException e) {
-				e.printStackTrace();
+			if (loot.isOnScreen()) {
+				try {
+					RSC.lootItem(loot, KingBlackDragon.profit);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			} else {
+				if (!Players.getLocal().isMoving()) {
+					Walking.walk(loot);
+				}
 			}
 		}
 	}

@@ -21,9 +21,9 @@ public class WalkingHandler extends Node {
 			new Tile(3070, 3507, 0), 
 			new Tile(3065, 3511, 0), 
 			new Tile(3056, 3513, 0), 
-			new Tile(3052, 3517, 0)},
+			new Tile(3052, 3517, 0)};
 			
-			toBank = {
+			/*toBank = {
 			new Tile(3052, 3517, 0),
 			new Tile(3056, 3513, 0), 
 			new Tile(3065, 3511, 0), 
@@ -32,7 +32,7 @@ public class WalkingHandler extends Node {
 			new Tile(3077, 3502, 0), 
 			new Tile(3086, 3502, 0), 
 			new Tile(3092, 3502, 0),
-			new Tile(3092, 3496, 0)};
+			new Tile(3092, 3496, 0)};*/
 	
 	public WalkingHandler(final int foodId) {
 		this.foodId = foodId;
@@ -59,7 +59,7 @@ public class WalkingHandler extends Node {
 		if (Inventory.getItem(this.foodId) == null 
 				&& !RSC.bankArea.contains(Players.getLocal().getLocation())
 				&& Players.getLocal().getLocation().getY() < 4000) {
-			Walking.newTilePath(toBank).traverse();
+			Walking.newTilePath(toArtifact).reverse().traverse();
 		}
 	}
 }

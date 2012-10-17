@@ -64,7 +64,7 @@ public class KingBlackDragon extends ActiveScript implements PaintListener, Mess
 		String message = e.getMessage().toString();
 		System.out.println(message);
 		if (message.contains("Your resistance to dragonfire is about to run out.")) {
-			KingBlackDragon.drinkAntiFire = true;
+			drinkAntiFire = true;
 		}
 	}
 }

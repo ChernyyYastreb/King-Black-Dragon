@@ -10,14 +10,29 @@ import org.powerbot.game.api.methods.input.Mouse;
 import org.powerbot.game.api.methods.interactive.NPCs;
 import org.powerbot.game.api.methods.interactive.Players;
 import org.powerbot.game.api.methods.tab.Inventory;
+import org.powerbot.game.api.methods.tab.Skills;
 import org.powerbot.game.api.methods.widget.Camera;
 import org.powerbot.game.api.util.Random;
 import org.powerbot.game.api.wrappers.interactive.NPC;
 
 public class KBDHandler extends Node {
-	NPC KBD;
+	private NPC KBD;
 	
-	private int KBDId = 50;
+	private int[] potionIds;
+	
+	private void chosePotions() {
+		if (Inventory.contains(RSC.EXTREME_RANGING_FLASK_IDS)) {
+			potionIds = RSC.EXTREME_RANGING_FLASK_IDS;
+		} else if (Inventory.contains(RSC.EXTREME_RANGING_POTION_IDS)) {
+			potionIds = RSC.EXTREME_RANGING_POTION_IDS;
+		} else if (Inventory.contains(RSC.RANGING_FLASK_IDS)) {
+			potionIds = RSC.RANGING_FLASK_IDS;
+		} else if (Inventory.contains(RSC.RANGING_POTION_IDS)) {
+			potionIds = RSC.RANGING_POTION_IDS;
+		} else {
+			potionIds = null;
+		}
+	}
 
 	@Override
 	public boolean activate() {
@@ -28,12 +43,23 @@ public class KBDHandler extends Node {
 	@Override
 	public void execute() {
 		//Instantiate the KBD as an NPC
-		KBD = NPCs.getNearest(KBDId);
+		KBD = NPCs.getNearest(50); //50 - the king black dragon's ID
 		
 		//If we have less than 600 Hp, let's eat
 		if (RSC.getHp() < 600 && Inventory.getItem(RSC.FOOD_IDS) != null) {
 			Inventory.getItem(RSC.FOOD_IDS).getWidgetChild().click(true);
 			Task.sleep(1500,2001);
+		}
+		
+		//If we are less than 8 levels boosted 
+		//and we have potions in our inventory, let's drink a potion
+		chosePotions();
+		if (potionIds != null && RSC.getBoosted(Skills.RANGE) < 8) {
+			if (Inventory.getItem(potionIds) != null) {
+				if (Inventory.getItem(potionIds).getWidgetChild().click(true)) {
+					Task.sleep(1500,2001);
+				}
+			}
 		}
 		
 		//If we have any vials in our inventory, drop them

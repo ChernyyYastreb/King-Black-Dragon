@@ -16,6 +16,7 @@ import org.powerbot.game.api.methods.Widgets;
 import org.powerbot.game.api.methods.input.Mouse;
 import org.powerbot.game.api.methods.interactive.Players;
 import org.powerbot.game.api.methods.node.Menu;
+import org.powerbot.game.api.methods.tab.Skills;
 import org.powerbot.game.api.util.Timer;
 import org.powerbot.game.api.wrappers.Area;
 import org.powerbot.game.api.wrappers.Tile;
@@ -28,7 +29,11 @@ import org.powerbot.game.api.wrappers.node.GroundItem;
  */
 public class RSC {
 	public static final int[] FOOD_IDS = { 7946 },
-							  ANTI_FIRE_IDS = {2458,2456,2454,2452};
+							  ANTI_FIRE_IDS = {2458,2456,2454,2452},
+							  RANGING_POTION_IDS = { 173, 171, 169, 2444 }, //1,2,3,4
+							  RANGING_FLASK_IDS = { 23313, 23311, 23309, 23307, 23305, 23303 }, //1,2,3,4,5,6
+							  EXTREME_RANGING_FLASK_IDS = { 23524, 23523, 23522, 23521, 23520, 23519 },
+							  EXTREME_RANGING_POTION_IDS = { 15327, 15326, 15325, 15324 }; //1,2,3,4;
 	
 	public static final Area bankArea = new Area(
 			new Tile(3089, 3500, 0), 
@@ -36,7 +41,21 @@ public class RSC {
 			new Tile(3098, 3487, 0), 
 			new Tile(3089, 3487, 0));
 	
-	public static final void drawMouse(Graphics g, Color c) {
+	/**
+	 * Get's the difference between the boosted level and the real level
+	 * @param skill The skill to get the boosted difference of
+	 * @return The difference in real level and boosted level
+	 */
+	public static int getBoosted(int skill) {
+		return Skills.getLevel(skill) - Skills.getRealLevel(skill);
+	}
+	
+	/**
+	 * Draws a painted mouse
+	 * @param g Graphics object to draw from
+	 * @param c The color of the object
+	 */
+	public static void drawMouse(Graphics g, Color c) {
 		Graphics2D g1 = (Graphics2D) g;
 		g1.setColor(c);
 		g1.setStroke(new BasicStroke(2));
@@ -45,22 +64,36 @@ public class RSC {
         g1.drawLine(p.x, 0, p.x, Game.getDimensions().height);
 	}
 	
+	/**
+	 * Waits for a condition to be true and returns the condition after
+	 * it has either been validated, or the method has timed out.
+	 * @param c The Condition you want to wait for
+	 * @param timeout How long you want to wait for the Condition
+	 * @return The Condtion
+	 */
 	public static boolean waitFor(Condition c, long timeout) {
 		Timer t = new Timer(timeout);
 		while (!c.validate() && t.isRunning()) {
-			if (c.validate()) {
-				return true;
-			}
 			Task.sleep(10);
 		}
 		return c.validate();
 	}
 	
+	/**
+	 * Gets the local players HP in real time
+	 * @return The local players HP
+	 */
 	public static int getHp() {
 		int hp = Integer.parseInt(Widgets.get(748, 8).getText());
 		return hp;
 	}
 	
+	/**
+	 * Loots the GroundItem passed in and adds its price to the passed in profit
+	 * @param loot The GroundItem to loot
+	 * @param profit The profit counter you want to add to
+	 * @throws IOException If the getPrice method is interrupted
+	 */
 	public static void lootItem(GroundItem loot, int profit) throws IOException {
 		String[] parts;
 		Mouse.move(loot.getCentralPoint().x,loot.getCentralPoint().y);
@@ -82,6 +115,11 @@ public class RSC {
 		}
 	}
 	
+	/**
+	 * Gets the price of the item via it's ID
+	 * @param id The id of the item 
+	 * @return The price of the item
+	 */
 	public static int getPrice(final int id) {
 		try {
 			final URL url = new URL(

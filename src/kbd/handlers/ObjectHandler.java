@@ -11,6 +11,7 @@ import org.powerbot.game.api.methods.Widgets;
 import org.powerbot.game.api.methods.interactive.Players;
 import org.powerbot.game.api.methods.node.SceneEntities;
 import org.powerbot.game.api.methods.tab.Inventory;
+import org.powerbot.game.api.wrappers.node.SceneObject;
 import org.powerbot.game.api.wrappers.widget.WidgetChild;
 
 /**
@@ -22,14 +23,19 @@ public class ObjectHandler extends Node {
 	private final int entranceId = 77834,
 					  ditchId = 65084,
 					  exitId = 1817;
+	
+	private SceneObject entrance, ditch, exit;
 
 	@Override
 	public boolean activate() {
-		if (SceneEntities.getNearest(entranceId) != null
+		entrance = SceneEntities.getNearest(entranceId);
+		ditch = SceneEntities.getNearest(ditchId);
+		exit = SceneEntities.getNearest(exitId);
+		if (entrance != null
 			&& Inventory.contains(RSC.FOOD_IDS)
 			&& Calculations.distance(Players.getLocal().getLocation(), SceneEntities.getNearest(entranceId)) < 20) {
 			return true;
-		} else if (SceneEntities.getNearest(exitId) != null
+		} else if (exit != null
 				   && !Inventory.contains(RSC.FOOD_IDS)) {
 			return true;
 		}
@@ -41,23 +47,23 @@ public class ObjectHandler extends Node {
 		final WidgetChild warningScreen = Widgets.get(1361, 13);
 		
 		//Below we handle exiting the cave
-		if (SceneEntities.getNearest(exitId) != null && !Inventory.contains(RSC.FOOD_IDS)) {
-			if (SceneEntities.getNearest(exitId).isOnScreen() 
+		if (exit != null && !Inventory.contains(RSC.FOOD_IDS)) {
+			if (exit.isOnScreen() 
 				&& Players.getLocal().getAnimation() != 8939) {
-				if (SceneEntities.getNearest(exitId).click(true)) {
+				if (exit.click(true)) {
 					Task.sleep(2000,3001);
 				}
 			} else {
-				Walking.walk(SceneEntities.getNearest(exitId));
+				Walking.walk(exit);
 			}
 		}
 		
 		//Here, we handle entering the cave
-		if (SceneEntities.getNearest(entranceId) != null) {
-			if (SceneEntities.getNearest(entranceId).isOnScreen() 
+		if (entrance != null) {
+			if (entrance.isOnScreen() 
 				&& !warningScreen.validate()
 				&& Players.getLocal().getAnimation() == -1) {
-				if (!Players.getLocal().isMoving() && SceneEntities.getNearest(entranceId).click(true)) {
+				if (!Players.getLocal().isMoving() && entrance.click(true)) {
 					Task.sleep(2000,2201);
 				}
 			} else {
@@ -66,15 +72,15 @@ public class ObjectHandler extends Node {
 				if (Players.getLocal().getAnimation() != 827
 					&& Players.getLocal().getAnimation() != 8939
 					&& !Players.getLocal().isMoving()) {
-					Walking.walk(SceneEntities.getNearest(entranceId));
+					Walking.walk(entrance);
 				}
 			}
 		}
 		
 		//If we accidentally cross the ditch, get back over
 		if (Players.getLocal().getLocation().getY() > 3520) {
-			if (SceneEntities.getNearest(ditchId) != null
-				&& SceneEntities.getNearest(ditchId).click(true)) {
+			if (ditch != null
+				&& ditch.click(true)) {
 				RSC.waitFor(new Condition() {
 					@Override
 					public boolean validate() {
