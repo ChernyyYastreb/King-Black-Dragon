@@ -21,6 +21,7 @@ public class PotionHandler extends Node {
 
 	@Override
 	public void execute() {
+		System.out.println("Antifire");
 		if (KingBlackDragon.drinkAntiFire && Inventory.getItem(RSC.ANTI_FIRE_IDS) != null) {
 			if (Inventory.getItem(RSC.ANTI_FIRE_IDS).getWidgetChild().click(true)) {
 				KingBlackDragon.drinkAntiFire = false;

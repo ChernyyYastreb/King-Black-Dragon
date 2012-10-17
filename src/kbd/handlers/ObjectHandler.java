@@ -1,9 +1,11 @@
 package kbd.handlers;
 
+import kbd.rsc.Condition;
 import kbd.rsc.RSC;
 
 import org.powerbot.core.script.job.Task;
 import org.powerbot.core.script.job.state.Node;
+import org.powerbot.game.api.methods.Calculations;
 import org.powerbot.game.api.methods.Walking;
 import org.powerbot.game.api.methods.Widgets;
 import org.powerbot.game.api.methods.interactive.Players;
@@ -24,7 +26,8 @@ public class ObjectHandler extends Node {
 	@Override
 	public boolean activate() {
 		if (SceneEntities.getNearest(entranceId) != null
-			&& Inventory.contains(RSC.FOOD_IDS)) {
+			&& Inventory.contains(RSC.FOOD_IDS)
+			&& Calculations.distance(Players.getLocal().getLocation(), SceneEntities.getNearest(entranceId)) < 20) {
 			return true;
 		} else if (SceneEntities.getNearest(exitId) != null
 				   && !Inventory.contains(RSC.FOOD_IDS)) {
@@ -61,7 +64,8 @@ public class ObjectHandler extends Node {
 				//if we are not in the teleport, 
 				//animation then we can walk to the object
 				if (Players.getLocal().getAnimation() != 827
-					&& Players.getLocal().getAnimation() != 8939) {
+					&& Players.getLocal().getAnimation() != 8939
+					&& !Players.getLocal().isMoving()) {
 					Walking.walk(SceneEntities.getNearest(entranceId));
 				}
 			}
@@ -71,7 +75,13 @@ public class ObjectHandler extends Node {
 		if (Players.getLocal().getLocation().getY() > 3520) {
 			if (SceneEntities.getNearest(ditchId) != null
 				&& SceneEntities.getNearest(ditchId).click(true)) {
-				Task.sleep(2500,3001);
+				RSC.waitFor(new Condition() {
+					@Override
+					public boolean validate() {
+						return Players.getLocal().getLocation().getY() < 3520;
+					}
+					
+				}, 4000);
 			}
 		}
 		

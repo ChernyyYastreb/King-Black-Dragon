@@ -23,6 +23,7 @@ public class BankingHandler extends Node {
 
 	@Override
 	public void execute() {
+		System.out.println("Banking");
 		if (RSC.waitFor(new Condition() {
 			@Override
 			public boolean validate() {

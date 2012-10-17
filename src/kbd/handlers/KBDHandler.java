@@ -1,10 +1,7 @@
 package kbd.handlers;
 
-import kbd.main.KingBlackDragon;
 import kbd.rsc.RSC;
 
-import org.powerbot.core.event.events.MessageEvent;
-import org.powerbot.core.event.listeners.MessageListener;
 import org.powerbot.core.script.job.Task;
 import org.powerbot.core.script.job.state.Node;
 import org.powerbot.game.api.methods.Calculations;
@@ -17,7 +14,7 @@ import org.powerbot.game.api.methods.widget.Camera;
 import org.powerbot.game.api.util.Random;
 import org.powerbot.game.api.wrappers.interactive.NPC;
 
-public class KBDHandler extends Node implements MessageListener {
+public class KBDHandler extends Node {
 	NPC KBD;
 	
 	private int KBDId = 50;
@@ -33,8 +30,8 @@ public class KBDHandler extends Node implements MessageListener {
 		//Instantiate the KBD as an NPC
 		KBD = NPCs.getNearest(KBDId);
 		
-		//If we have less than 70% Hp, let's eat
-		if (Players.getLocal().getHpPercent() < 70 && Inventory.getItem(RSC.FOOD_IDS) != null) {
+		//If we have less than 600 Hp, let's eat
+		if (RSC.getHp() < 600 && Inventory.getItem(RSC.FOOD_IDS) != null) {
 			Inventory.getItem(RSC.FOOD_IDS).getWidgetChild().click(true);
 			Task.sleep(1500,2001);
 		}
@@ -85,13 +82,6 @@ public class KBDHandler extends Node implements MessageListener {
 					Camera.turnTo(KBD);
 				}
 			}
-		}
-	}
-	
-	@Override
-	public void messageReceived(MessageEvent e) {
-		if (e.getMessage().equalsIgnoreCase("Your resistance to dragonfire is about to run out.")) {
-			KingBlackDragon.drinkAntiFire = true;
 		}
 	}
 }
