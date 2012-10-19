@@ -33,7 +33,11 @@ public class RSC {
 							  RANGING_POTION_IDS = { 173, 171, 169, 2444 }, //1,2,3,4
 							  RANGING_FLASK_IDS = { 23313, 23311, 23309, 23307, 23305, 23303 }, //1,2,3,4,5,6
 							  EXTREME_RANGING_FLASK_IDS = { 23524, 23523, 23522, 23521, 23520, 23519 },
-							  EXTREME_RANGING_POTION_IDS = { 15327, 15326, 15325, 15324 }; //1,2,3,4;
+							  EXTREME_RANGING_POTION_IDS = { 15327, 15326, 15325, 15324 }, //1,2,3,4
+							  ANTI_POISON_IDS = {},
+							  SUPER_ANTI_POISON_IDS = {},
+							  ANTI_POISON_P_IDS = {},
+							  ANTI_POISON_PP_IDS = {};
 	
 	public static final Area bankArea = new Area(
 			new Tile(3089, 3500, 0), 

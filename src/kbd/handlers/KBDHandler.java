@@ -1,5 +1,6 @@
 package kbd.handlers;
 
+import kbd.main.KingBlackDragon;
 import kbd.rsc.RSC;
 
 import org.powerbot.core.script.job.Task;
@@ -11,14 +12,21 @@ import org.powerbot.game.api.methods.interactive.NPCs;
 import org.powerbot.game.api.methods.interactive.Players;
 import org.powerbot.game.api.methods.tab.Inventory;
 import org.powerbot.game.api.methods.tab.Skills;
+import org.powerbot.game.api.methods.widget.Bank;
 import org.powerbot.game.api.methods.widget.Camera;
 import org.powerbot.game.api.util.Random;
+import org.powerbot.game.api.wrappers.Tile;
 import org.powerbot.game.api.wrappers.interactive.NPC;
 
 public class KBDHandler extends Node {
 	private NPC KBD;
 	
-	private int[] potionIds;
+	private int[] potionIds, antiPoisonIds;
+	
+	private boolean count = true;
+	
+	private Tile teleTile = new Tile(2273, 4681, 0),
+				 middleTile = new Tile(2273, 4694, 0);
 	
 	private void chosePotions() {
 		if (Inventory.contains(RSC.EXTREME_RANGING_FLASK_IDS)) {
@@ -32,12 +40,24 @@ public class KBDHandler extends Node {
 		} else {
 			potionIds = null;
 		}
+		if (Bank.getItem(RSC.ANTI_POISON_PP_IDS) != null) {
+			antiPoisonIds = RSC.ANTI_POISON_PP_IDS;
+		} else if (Bank.getItem(RSC.ANTI_POISON_P_IDS) != null) {
+			antiPoisonIds = RSC.ANTI_POISON_P_IDS;
+		} else if (Bank.getItem(RSC.SUPER_ANTI_POISON_IDS) != null) {
+			antiPoisonIds = RSC.SUPER_ANTI_POISON_IDS;
+		} else if (Bank.getItem(RSC.ANTI_POISON_IDS) != null) {
+			antiPoisonIds = RSC.ANTI_POISON_IDS;
+		} else {
+			antiPoisonIds = null;
+		}
 	}
 
 	@Override
 	public boolean activate() {
 		//Only activate if we are in the KBD cave
-		return Players.getLocal().getLocation().getY() > 4600;
+		return Players.getLocal().getLocation().getY() > 4600
+				&& Inventory.contains(RSC.FOOD_IDS);
 	}
 
 	@Override
@@ -51,14 +71,45 @@ public class KBDHandler extends Node {
 			Task.sleep(1500,2001);
 		}
 		
+		//If we can count
+		if (count) {
+			//If the KBD is dying
+			if (KBD != null && KBD.getHpRatio() == 0) {
+				KingBlackDragon.killCount++;
+				System.out.println(KingBlackDragon.killCount);
+				count = false;
+			}
+		}
+		
+		//If we KBD is null, we should be able to count again
+		if (KBD == null) {
+			count = true;
+		}
+		
 		//If we are less than 8 levels boosted 
 		//and we have potions in our inventory, let's drink a potion
 		chosePotions();
-		if (potionIds != null && RSC.getBoosted(Skills.RANGE) < 8) {
+		if (potionIds != null && RSC.getBoosted(Skills.RANGE) < 6) {
 			if (Inventory.getItem(potionIds) != null) {
 				if (Inventory.getItem(potionIds).getWidgetChild().click(true)) {
 					Task.sleep(1500,2001);
 				}
+			}
+		}
+		
+		if (antiPoisonIds != null)
+		
+		if (Players.getLocal().getLocation().equals(teleTile)) {
+			int derive = Random.nextInt(0, 3);
+			switch (derive) {
+			case 0:
+				Walking.walk(middleTile.derive(1, 0));
+				break;
+			case 1:
+				Walking.walk(middleTile.derive(-1, 0));
+				break;
+			case 2:
+				Walking.walk(middleTile.derive(0, 1));
 			}
 		}
 		
@@ -69,10 +120,10 @@ public class KBDHandler extends Node {
 		
 		//If the KBD is dead, let's move the mouse a bit to keep us logged in
 		if (KBD == null) {
-			if (Random.nextInt(1, 101) == 6) {
+			if (Random.nextInt(1, 301) == 6) {
 				Mouse.move(Random.nextInt(50, 765), Random.nextInt(100, 765));
 			}
-			if (Random.nextInt(1, 101) == 7) {
+			if (Random.nextInt(1, 301) == 7) {
 				Camera.setAngle(Random.nextInt(100, 360));
 			}
 		} else {

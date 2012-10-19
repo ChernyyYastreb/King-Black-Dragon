@@ -19,11 +19,16 @@ import org.powerbot.game.api.util.Random;
 @Manifest(authors= {"TaylorSwift","Jdog653"},
 		  name = "Auto KBD",
 		  description = "Kills the King Black Dragon",
-		  version = 0.01D)
+		  version = 0.01)
 public class KingBlackDragon extends ActiveScript implements PaintListener, MessageListener {
 	public static boolean drinkAntiFire = true;
 	
-	public static int profit;
+	public static int profit, killCount;
+	
+	public static String information;
+	
+	//PAINT URL - http://i.imgur.com/cnzNW.png, Text font = Arial, RGB palate = 136 128 224
+	//Text effects = drop shadow, 2px distance/size @ 90degrees
 	
 	private Tree scriptTree = new Tree(new Node[] {
 			new PotionHandler(),
@@ -36,6 +41,8 @@ public class KingBlackDragon extends ActiveScript implements PaintListener, Mess
 	
 	public void onStart() {
 		profit = 0;
+		killCount = 0;
+		information = "";
 	}
 
 	@Override
@@ -56,14 +63,16 @@ public class KingBlackDragon extends ActiveScript implements PaintListener, Mess
 	public void onRepaint(Graphics g1) {
 		Graphics2D g = (Graphics2D) g1;
 		RSC.drawMouse(g, new Color(0,0,0,175));
+		g.drawString(information, 0, 0);
 	}
 	
 	//
 	@Override
 	public void messageReceived(MessageEvent e) {
 		String message = e.getMessage().toString();
-		System.out.println(message);
-		if (message.contains("Your resistance to dragonfire is about to run out.")) {
+		System.out.println(message + ", sent by: " + e.getSender().toString());
+		if (message.contains("Your resistance to dragonfire is about to run out.")
+				&& e.getSender().equals("")) {
 			drinkAntiFire = true;
 		}
 	}

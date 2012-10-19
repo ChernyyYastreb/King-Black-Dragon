@@ -5,10 +5,12 @@ import java.io.IOException;
 import kbd.main.KingBlackDragon;
 import kbd.rsc.RSC;
 
+import org.powerbot.core.script.job.Task;
 import org.powerbot.core.script.job.state.Node;
 import org.powerbot.game.api.methods.Walking;
 import org.powerbot.game.api.methods.interactive.Players;
 import org.powerbot.game.api.methods.node.GroundItems;
+import org.powerbot.game.api.methods.tab.Inventory;
 import org.powerbot.game.api.wrappers.node.GroundItem;
 
 public class LootHandler extends Node {
@@ -30,10 +32,16 @@ public class LootHandler extends Node {
 		GroundItem loot = GroundItems.getNearest(this.loot);
 		if (loot != null) {
 			if (loot.isOnScreen()) {
-				try {
+				if (Inventory.isFull() && Inventory.getItem(RSC.FOOD_IDS) != null) {
+					if (Inventory.getItem(RSC.FOOD_IDS).getWidgetChild().click(true)) {
+						Task.sleep(1800,2001);
+					}
+				} else {
+					try {
 					RSC.lootItem(loot, KingBlackDragon.profit);
-				} catch (IOException e) {
-					e.printStackTrace();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 				}
 			} else {
 				if (!Players.getLocal().isMoving()) {

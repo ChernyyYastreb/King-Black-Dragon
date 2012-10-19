@@ -5,7 +5,6 @@ import kbd.rsc.RSC;
 
 import org.powerbot.core.script.job.Task;
 import org.powerbot.core.script.job.state.Node;
-import org.powerbot.game.api.methods.Calculations;
 import org.powerbot.game.api.methods.Walking;
 import org.powerbot.game.api.methods.Widgets;
 import org.powerbot.game.api.methods.interactive.Players;
@@ -32,8 +31,7 @@ public class ObjectHandler extends Node {
 		ditch = SceneEntities.getNearest(ditchId);
 		exit = SceneEntities.getNearest(exitId);
 		if (entrance != null
-			&& Inventory.contains(RSC.FOOD_IDS)
-			&& Calculations.distance(Players.getLocal().getLocation(), SceneEntities.getNearest(entranceId)) < 20) {
+			&& Inventory.contains(RSC.FOOD_IDS)) {
 			return true;
 		} else if (exit != null
 				   && !Inventory.contains(RSC.FOOD_IDS)) {
