@@ -10,7 +10,6 @@ import org.powerbot.game.api.methods.tab.Inventory;
 import org.powerbot.game.api.wrappers.Tile;
 
 public class WalkingHandler extends Node {
-	private int foodId;
 	
 	private final Tile[] toArtifact = {
 			new Tile(3092, 3496, 0), 
@@ -34,16 +33,12 @@ public class WalkingHandler extends Node {
 			new Tile(3092, 3502, 0),
 			new Tile(3092, 3496, 0)};*/
 	
-	public WalkingHandler(final int foodId) {
-		this.foodId = foodId;
-	}
-	
 	@Override
 	public boolean activate() {
-		if (Inventory.contains(new int[]{this.foodId}) && Players.getLocal().getLocation().getY() < 4000) {
+		if (Inventory.contains(RSC.FOOD_IDS) && Players.getLocal().getLocation().getY() < 4000) {
 			return true;
 		}
-		if (Inventory.getItem(this.foodId) == null 
+		if (Inventory.getItem(RSC.FOOD_IDS) == null 
 				&& !RSC.bankArea.contains(Players.getLocal().getLocation())
 				&& Players.getLocal().getLocation().getY() < 4000) {
 			return true;
@@ -53,10 +48,10 @@ public class WalkingHandler extends Node {
 
 	@Override
 	public void execute() {
-		if (Inventory.getItem(this.foodId) != null && Players.getLocal().getLocation().getY() < 4000) {
+		if (Inventory.getItem(RSC.FOOD_IDS) != null && Players.getLocal().getLocation().getY() < 4000) {
 		    Walking.newTilePath(toArtifact).traverse();
 		}
-		if (Inventory.getItem(this.foodId) == null 
+		if (Inventory.getItem(RSC.FOOD_IDS) == null 
 				&& !RSC.bankArea.contains(Players.getLocal().getLocation())
 				&& Players.getLocal().getLocation().getY() < 4000) {
 			Walking.newTilePath(toArtifact).reverse().traverse();

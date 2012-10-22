@@ -6,13 +6,14 @@ import kbd.rsc.RSC;
 import org.powerbot.core.script.job.Task;
 import org.powerbot.core.script.job.state.Node;
 import org.powerbot.game.api.methods.Calculations;
+import org.powerbot.game.api.methods.Tabs;
 import org.powerbot.game.api.methods.Walking;
+import org.powerbot.game.api.methods.Widgets;
 import org.powerbot.game.api.methods.input.Mouse;
 import org.powerbot.game.api.methods.interactive.NPCs;
 import org.powerbot.game.api.methods.interactive.Players;
 import org.powerbot.game.api.methods.tab.Inventory;
 import org.powerbot.game.api.methods.tab.Skills;
-import org.powerbot.game.api.methods.widget.Bank;
 import org.powerbot.game.api.methods.widget.Camera;
 import org.powerbot.game.api.util.Random;
 import org.powerbot.game.api.wrappers.Tile;
@@ -23,7 +24,7 @@ public class KBDHandler extends Node {
 	
 	private int[] potionIds, antiPoisonIds;
 	
-	private boolean count = true;
+	private boolean count = true, check = true;
 	
 	private Tile teleTile = new Tile(2273, 4681, 0),
 				 middleTile = new Tile(2273, 4694, 0);
@@ -40,13 +41,13 @@ public class KBDHandler extends Node {
 		} else {
 			potionIds = null;
 		}
-		if (Bank.getItem(RSC.ANTI_POISON_PP_IDS) != null) {
+		if (Inventory.getItem(RSC.ANTI_POISON_PP_IDS) != null) {
 			antiPoisonIds = RSC.ANTI_POISON_PP_IDS;
-		} else if (Bank.getItem(RSC.ANTI_POISON_P_IDS) != null) {
+		} else if (Inventory.getItem(RSC.ANTI_POISON_P_IDS) != null) {
 			antiPoisonIds = RSC.ANTI_POISON_P_IDS;
-		} else if (Bank.getItem(RSC.SUPER_ANTI_POISON_IDS) != null) {
+		} else if (Inventory.getItem(RSC.SUPER_ANTI_POISON_IDS) != null) {
 			antiPoisonIds = RSC.SUPER_ANTI_POISON_IDS;
-		} else if (Bank.getItem(RSC.ANTI_POISON_IDS) != null) {
+		} else if (Inventory.getItem(RSC.ANTI_POISON_IDS) != null) {
 			antiPoisonIds = RSC.ANTI_POISON_IDS;
 		} else {
 			antiPoisonIds = null;
@@ -71,6 +72,23 @@ public class KBDHandler extends Node {
 			Task.sleep(1500,2001);
 		}
 		
+		if (KingBlackDragon.friendsChat && check) {
+			Tabs.FRIENDS_CHAT.open();
+			Task.sleep(400);
+			if (Widgets.get(1109, 19).getTextureId() != 1070) {
+				check = false;
+			}
+			if (check) {
+				if (Widgets.get(1109, 19).validate() && Widgets.get(1109, 19).getTextureId() == 1070
+						&& Widgets.get(1109, 20).visible()) {
+					if (Widgets.get(1109, 19).click(true)) {
+						check = false;
+						Task.sleep(1000);
+					}
+				}
+			}
+		}
+		
 		//If we can count
 		if (count) {
 			//If the KBD is dying
@@ -78,6 +96,7 @@ public class KBDHandler extends Node {
 				KingBlackDragon.killCount++;
 				System.out.println(KingBlackDragon.killCount);
 				count = false;
+				check = true;
 			}
 		}
 		
@@ -97,7 +116,15 @@ public class KBDHandler extends Node {
 			}
 		}
 		
-		if (antiPoisonIds != null)
+		//If we are poisoned and we have some antipoison, drink some
+		if (antiPoisonIds != null && Widgets.get(748, 4).validate() 
+				&& Widgets.get(748, 4).getTextureId() == 1801) {
+			if (Inventory.contains(antiPoisonIds)) {
+				if (Widgets.get(748, 4).click(true)) {
+					Task.sleep(800, 1001);
+				}
+			}
+		}
 		
 		if (Players.getLocal().getLocation().equals(teleTile)) {
 			int derive = Random.nextInt(0, 3);

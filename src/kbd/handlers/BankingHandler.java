@@ -1,5 +1,6 @@
 package kbd.handlers;
 
+import kbd.main.KingBlackDragon;
 import kbd.rsc.Condition;
 import kbd.rsc.RSC;
 
@@ -9,10 +10,22 @@ import org.powerbot.game.api.methods.tab.Inventory;
 import org.powerbot.game.api.methods.widget.Bank;
 
 public class BankingHandler extends Node {
-	private int foodId, potionId, antiPoisonId;
+	private int foodId = -1, potionId, antiPoisonId;
 	
-	public BankingHandler(final int foodId) {
-		this.foodId = foodId;
+	/**
+	 * Searches the bank for the best food.
+	 * If it does not find any food, set stop to true.
+	 */
+	private void choseFood() {
+		for (int i : RSC.FOOD_IDS) {
+			if (Bank.getItem(i) != null) {
+				foodId = i;
+				break;
+			}
+		}
+		if (foodId == -1) {
+			KingBlackDragon.stop = true;
+		}
 	}
 	
 	/**
@@ -78,6 +91,7 @@ public class BankingHandler extends Node {
 				if (antiPoisonId != -1) {
 					Bank.withdraw(antiPoisonId, 1);
 				}
+				choseFood();
 				//If we found a potion, withdraw one
 				if (potionId != -1) {
 					//If the withdraw was successful, close the bank
