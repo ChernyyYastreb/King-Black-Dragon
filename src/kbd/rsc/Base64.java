@@ -1,6 +1,6 @@
 package kbd.rsc;
 
-public class Base64 { // ok i have to go the the bathroom brb
+public class Base64 { 
 
 	private static final char[] ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
 			.toCharArray();
